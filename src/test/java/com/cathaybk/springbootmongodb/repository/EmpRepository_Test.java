@@ -59,4 +59,12 @@ public class EmpRepository_Test {
         System.out.println("insertedVO = " + insertedVO);
     }
 
+    @Test
+    @Disabled
+    void test004() {
+        empRepository.findEmpVOSByGender("M")
+                .stream()
+                .forEach(System.out::println);
+    }
+
 }
