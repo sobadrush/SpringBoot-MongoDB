@@ -1,6 +1,6 @@
 package com.cathaybk.springbootmongodb.controller;
 
-import org.springframework.stereotype.Controller;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class HelloWorldController {
 
     @ResponseBody
-    @GetMapping("/sayHello")
+    @GetMapping(value = "/sayHello", produces = MediaType.TEXT_PLAIN_VALUE)
     public String sayHello() {
         return "Hello SpringBoot!";
     }
