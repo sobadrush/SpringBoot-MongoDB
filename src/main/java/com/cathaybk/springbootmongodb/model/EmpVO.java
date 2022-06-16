@@ -5,9 +5,11 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 import org.springframework.data.mongodb.core.mapping.MongoId;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.math.BigDecimal;
 
@@ -24,6 +26,7 @@ import java.math.BigDecimal;
 public class EmpVO {
 
     @MongoId // 使用 @MongoID 能更清晰的指定 _id 主键
+    @Indexed
     // @Field(value = "_id")
     private String empId; // 形式：62a9f72ecd316324ae712142
 
@@ -38,5 +41,8 @@ public class EmpVO {
 
     @Field(value = "gender")
     private String gender;
+
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    private java.util.Date createdDate;
 
 }

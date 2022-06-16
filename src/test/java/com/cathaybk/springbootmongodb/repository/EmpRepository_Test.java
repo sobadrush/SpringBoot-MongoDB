@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 /**
  * @author RogerLo
@@ -55,6 +56,7 @@ public class EmpRepository_Test {
                         .empSalary(new BigDecimal(42000))
                         .empTitle("總司令")
                         .gender("M")
+                        .createdDate(new Date())
                         .build());
         System.out.println("insertedVO = " + insertedVO);
     }
@@ -65,6 +67,27 @@ public class EmpRepository_Test {
         empRepository.findEmpVOSByGender("M")
                 .stream()
                 .forEach(System.out::println);
+    }
+
+    @Test
+    @Disabled
+    void test005() {
+        EmpVO empVO = empRepository.findByEmpName("Snow");
+        System.out.println("empVO = " + empVO);
+        empVO.setEmpTitle("北境之王");
+        System.out.println("After Update : " + empRepository.save(empVO));
+    }
+
+    @Test
+    // @Disabled
+    void test006() {
+        EmpVO snow = empRepository.findByEmpName("Snow");;
+        empRepository.delete(snow);
+
+        System.out.println("====================================================");
+        empRepository.findAll().stream().forEach(vo -> {
+            System.out.println("vo = " + vo);
+        });
     }
 
 }
