@@ -1,0 +1,32 @@
+server:
+  servlet:
+    context-path: /RogerSpringBootMongo
+
+# 設定 mongoDB 連線資訊 (使用 Jasypt 加密)
+spring:
+  data:
+    mongodb:
+      username: ENC(Hoy4AgRmLJXcHI+UH/XvdLyfj1+jQyYRG1NWFqanpkA=) # 使用 Jasypt 加密 (可使用 JasyptEncryptUtil.java): 原為 myDbUser
+      password: ENC(gGt1aiDXi5vLk8OFcRsbOyjfWxET/jzeFnW4AJU5J50=)  # 使用 Jasypt 加密 (可使用 JasyptEncryptUtil.java): 原為 myDbUser
+      authentication-database: ENC(dCPgTDh1X7xlxt40Id4XEq1eYuGvh9VBnfuDPbzQK0I=)  # 使用 Jasypt 加密 (可使用 JasyptEncryptUtil.java): 原為 myshinynewdb
+      database: myshinynewdb
+      host: localhost
+      port: 27017
+      auto-index-creation: true # 自動建立INDEX
+  
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+# Jasypt 加密配置
+jasypt:
+  encryptor:
+    password: ${JASYPT_ENCRYPTOR_PASSWORD:mySecretKey} # 加密密鑰，建議使用環境變量設置
+    algorithm: PBEWithMD5AndDES # 加密演算法
+    key-obtention-iterations: 1000 # 密鑰獲取迭代次數
+    pool-size: 1 # 連接池大小
+    provider-name: SunJCE # 提供者名稱
+    salt-generator-classname: org.jasypt.salt.RandomSaltGenerator # salt 生成器類
+    string-output-type: base64 # 字符串輸出類型

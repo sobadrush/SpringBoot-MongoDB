@@ -17,7 +17,7 @@
     <description>SpringBoot-MongoDB</description>
 
     <properties>
-        <java.version>18</java.version>
+        <java.version>17</java.version>
     </properties>
 
     <dependencies>
@@ -60,6 +60,15 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
+        </dependency>
+
+        <!-- Jasypt 加密配置 -->
+        <!-- 會自動讀取 application.yml 中的 jasypt.encryptor.*
+   配置，並自動建立和配置加密器 -->
+        <dependency>
+            <groupId>com.github.ulisesbocchio</groupId>
+            <artifactId>jasypt-spring-boot-starter</artifactId>
+            <version>3.0.4</version>
         </dependency>
 
     </dependencies>
