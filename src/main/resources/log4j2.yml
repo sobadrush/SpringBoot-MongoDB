@@ -1,0 +1,63 @@
+Configuration:
+  status: WARN
+  monitorInterval: 0
+  packages: com.cathaybk.springbootmongodb.config
+
+  Properties:
+    Property:
+      - name: APP_NAME
+        value: "SpringBoot-MongoDB"
+      - name: log-path
+        value: "logs"
+      - name: log-pattern
+        value: "[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n"
+      - name: console-log-pattern
+        value: "%d{yyyy-MM-dd HH:mm:ss.SSS} %highlight{[%thread] %-5level} %style{%logger{36}}{cyan} - %msg%n"
+
+  Appenders:
+    Console:
+      name: My_Console_Appender
+      target: SYSTEM_OUT
+      PatternLayout:
+        pattern: ${console-log-pattern}
+
+    RollingFile:
+      name: My_RollingFile_Appender
+      fileName: "${log-path}/${APP_NAME}.log"
+      filePattern: "${log-path}/${APP_NAME}.%d{yyyy-MM-dd HHmm}-%i.log.gz"
+      PatternLayout:
+        pattern: "${log-pattern}"
+      Policies:
+        TimeBasedTriggeringPolicy:
+          interval: 1
+        SizeBasedTriggeringPolicy:
+          size: "3MB"
+
+    # 需搭配 CustomMongoDbAppender.java 使用
+    CustomMongoDb:
+      name: My_MongoDB_Appender
+      connectionString: "mongodb://${env:MONGO_USER}:${env:MONGO_PWD}@localhost:27017/myshinynewdb?authSource=myshinynewdb"
+      databaseName: "myshinynewdb"
+      collectionName: "application_logs"
+      ThresholdFilter:
+        level: INFO
+        onMatch: ACCEPT
+        onMismatch: DENY
+
+  Loggers:
+    Root:
+      level: WARN
+      AppenderRef:
+        - ref: My_Console_Appender
+        - ref: My_MongoDB_Appender
+    Logger:
+      - name: com.cathaybk
+        level: INFO
+        additivity: false
+        AppenderRef:
+          - ref: My_Console_Appender
+            level: INFO
+          - ref: My_RollingFile_Appender
+            level: INFO
+          - ref: My_MongoDB_Appender
+            level: INFO

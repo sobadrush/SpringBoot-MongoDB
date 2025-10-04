@@ -83,8 +83,8 @@ public class CustomMongoDbAppender extends AbstractAppender {
             if (event.getThrown() != null) {
                 Throwable t = event.getThrown();
                 logDocument.append("exception", new Document()
-                        .append("class", t.getClass().getName())
-                        .append("message", t.getMessage()));
+                            .append("class", t.getClass().getName())
+                            .append("message", t.getMessage()));
             }
 
             collection.insertOne(logDocument);

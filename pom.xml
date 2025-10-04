@@ -158,7 +158,6 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <!-- excludes 區塊移除，避免排除 lombok -->
             </plugin>
         </plugins>
     </build>
