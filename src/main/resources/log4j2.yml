@@ -1,0 +1,82 @@
+Configuration:
+  name: Default
+  status: OFF # log4j2 框架自身的日誌級別，用來調試 log4j2 的配置文件用，上線時應切為 OFF
+  monitorInterval: 0 # 自動重新讀取配置文件的時間間隔，單位秒(預設值為0，表示不自動重新讀取)
+
+  Properties:
+    Property:
+      - name: APP_NAME
+        value: "SpringBoot-MongoDB"
+      - name: log-path
+        value: "logs"
+      - name: log-pattern
+        value: "[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n"
+      - name: console-log-pattern
+        value: "%d{yyyy-MM-dd HH:mm:ss.SSS} %highlight{[%thread] %-5level} %style{%logger{36}}{cyan} - %msg%n"
+
+  Appenders:
+
+    Console:
+      name: My_Console_Appender
+      target: SYSTEM_OUT
+      PatternLayout:
+        pattern: ${console-log-pattern}
+
+    RollingFile:
+      name: My_RollingFile_Appender
+      fileName: "${log-path}/${APP_NAME}.log"
+      filePattern: "${log-path}/${APP_NAME}.%d{yyyy-MM-dd HHmm}-%i.log.gz"
+      PatternLayout:
+        pattern: "${log-pattern}"
+      Policies:
+        TimeBasedTriggeringPolicy:
+          interval: 1
+        SizeBasedTriggeringPolicy:
+          size: "3MB"
+
+    # MongoDB Appender - 將日誌寫入 MongoDB
+    MongoDb3:
+      name: My_MongoDB_Appender
+      connectionString: "mongodb://localhost:27017/myshinynewdb"
+      collectionName: "application_logs"
+      # 只記錄 INFO 及以上級別的日誌到 MongoDB
+      ThresholdFilter:
+        level: INFO
+        onMatch: ACCEPT
+        onMismatch: DENY
+      # 自定義文檔結構
+      MongoDbDocumentObject:
+        - key: "timestamp"
+          value: "%d{yyyy-MM-dd'T'HH:mm:ss.SSSZ}"
+        - key: "level"
+          value: "%level"
+        - key: "thread"
+          value: "%thread"
+        - key: "logger"
+          value: "%logger"
+        - key: "message"
+          value: "%message"
+        - key: "application"
+          value: "${APP_NAME}"
+        - key: "host"
+          value: "%X{hostname:-unknown}"
+        - key: "exception"
+          value: "%exception{full}"
+
+  Loggers:
+    Root:
+      level: WARN
+      AppenderRef:
+        - ref: My_Console_Appender
+        - ref: My_MongoDB_Appender
+    Logger:
+      - name: com.cathaybk
+        level: INFO
+        additivity: false
+        AppenderRef:
+          - ref: My_Console_Appender
+            level: INFO
+          - ref: My_RollingFile_Appender
+            level: INFO
+          - ref: My_MongoDB_Appender
+            level: INFO

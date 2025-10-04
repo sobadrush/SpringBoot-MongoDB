@@ -20,6 +20,10 @@ spring:
       hibernate:
         format_sql: true
 
+# Log4j2 配置
+logging:
+  config: classpath:log4j2.yml
+
 # Jasypt 加密配置
 jasypt:
   encryptor:
