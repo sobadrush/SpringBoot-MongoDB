@@ -20,9 +20,9 @@ spring:
       hibernate:
         format_sql: true
 
-# Log4j2 配置
+# Log4j2 配置 - 改用 XML 格式
 logging:
-  config: classpath:log4j2.yml
+  config: classpath:log4j2.xml
 
 # Jasypt 加密配置
 jasypt:

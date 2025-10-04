@@ -1,6 +1,7 @@
 package com.cathaybk.springbootmongodb.controller;
 
-import lombok.extern.log4j.Log4j2;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,8 +14,9 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RequestMapping("/HelloWorldController")
 @RestController
-@Log4j2
 public class HelloWorldController {
+
+    private static final Logger log = LogManager.getLogger(HelloWorldController.class);
 
     @ResponseBody
     @GetMapping(value = "/sayHello", produces = MediaType.TEXT_PLAIN_VALUE)
