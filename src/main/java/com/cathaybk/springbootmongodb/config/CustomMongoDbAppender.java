@@ -45,8 +45,16 @@ public class CustomMongoDbAppender extends AbstractAppender {
     }
 
     private void tryInitIfNeeded() {
-        if (collection != null || mongoClient != null) return;
-        if (!initTried.compareAndSet(false, true)) return; // 僅嘗試一次初始化
+        // 若已建立連線則直接返回
+        if (collection != null || mongoClient != null) {
+            return;
+        }
+
+        // 僅嘗試一次初始化(當 initTried 為 false 時，設為 true 並繼續執行初始化)
+        if (!initTried.compareAndSet(false, true)) {
+            return;
+        }
+
         try {
             if (connectionString == null || databaseName == null || collectionName == null) {
                 LOGGER.error("CustomMongoDbAppender 缺少必要參數(connectionString/databaseName/collectionName)");
@@ -99,7 +107,9 @@ public class CustomMongoDbAppender extends AbstractAppender {
     public void stop() {
         super.stop();
         try {
-            if (mongoClient != null) mongoClient.close();
+            if (mongoClient != null) {
+                mongoClient.close();
+            }
         } catch (Exception ignored) {
         }
     }
@@ -112,7 +122,9 @@ public class CustomMongoDbAppender extends AbstractAppender {
             @PluginAttribute("collectionName") String collectionName,
             @PluginElement("Filter") Filter filter) {
 
-        if (name == null) name = "CustomMongoDbAppender";
+        if (name == null) {
+            name = "CustomMongoDbAppender";
+        }
         // 不在此處建立連線；永遠回傳一個可用的 appender 實例
         return new CustomMongoDbAppender(name, filter, connectionString, databaseName, collectionName);
     }

@@ -10,9 +10,9 @@ Configuration:
       - name: log-path
         value: "logs"
       - name: log-pattern
-        value: "[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n"
+        value: "[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - [Line:%L] %msg%n"
       - name: console-log-pattern
-        value: "%highlight{[%thread] %-5level} %d{yyyy-MM-dd HH:mm:ss.SSS} %style{%logger{36}}{cyan} - %msg%n"
+        value: "[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - [Line:%L] %msg%n"
 
   Appenders:
     Console:
@@ -53,15 +53,13 @@ Configuration:
         - ref: My_Console_Appender
     Logger: # named logger 具名日誌
       - name: com.cathaybk
-        level: INFO
+        level: INFO # 定義該 Appender 接收的最低日誌等級門檻
         additivity: false
         AppenderRef:
           - ref: My_Console_Appender
-            level: INFO
+            level: INFO # - 根據每個 AppenderRef 的 level 再判斷是否要傳送給該 Appender
           - ref: My_RollingFile_Appender
             level: INFO
-          # - ref: My_MongoDB_Appender
-          #   level: INFO
 
       - name: my_mongodb # 自訂 logger 名稱(當要寫進 MongoDB 時使用: Logger mongoLogger = LogManager.getLogger("my_mongodb");)
         level: INFO
