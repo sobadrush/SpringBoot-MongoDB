@@ -21,11 +21,12 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * 自定義 MongoDB Appender（延遲連線版）
  * - 啟動時不連線 MongoDB，避免初始化失敗
  * - 第一次寫入時才嘗試連線，若失敗則只記錄錯誤、不阻斷應用
+ * ※ log4j2.yml 中，需設定 【packages: com.cathaybk.springbootmongodb.config】
  */
 @Plugin(name = "CustomMongoDb", category = "Core", elementType = "appender", printObject = true)
 public class CustomMongoDbAppender extends AbstractAppender {
 
-    // 連線參數（由 XML 注入）
+    // 連線參數（由 xml/yml 注入）
     private final String connectionString;
     private final String databaseName;
     private final String collectionName;

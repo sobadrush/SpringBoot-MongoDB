@@ -57,7 +57,8 @@ public class EmpRepository_Test {
                         .empTitle("總司令")
                         .gender("M")
                         .createdDate(new Date())
-                        .build());
+                        .build()
+        );
         System.out.println("insertedVO = " + insertedVO);
     }
 

@@ -4,16 +4,16 @@ server:
 
 # 設定 mongoDB 連線資訊 (使用 Jasypt 加密)
 spring:
-  data:
-    mongodb:
-      username: ENC(Hoy4AgRmLJXcHI+UH/XvdLyfj1+jQyYRG1NWFqanpkA=) # 使用 Jasypt 加密 (可使用 JasyptEncryptUtil.java): 原為 myDbUser
-      password: ENC(gGt1aiDXi5vLk8OFcRsbOyjfWxET/jzeFnW4AJU5J50=)  # 使用 Jasypt 加密 (可使用 JasyptEncryptUtil.java): 原為 myDbUser
-      authentication-database: ENC(dCPgTDh1X7xlxt40Id4XEq1eYuGvh9VBnfuDPbzQK0I=)  # 使用 Jasypt 加密 (可使用 JasyptEncryptUtil.java): 原為 myshinynewdb
-      database: myshinynewdb
-      host: localhost
-      port: 27017
-      auto-index-creation: true # 自動建立INDEX
-  
+  # data:
+  #   mongodb:
+  #     username: ENC(Hoy4AgRmLJXcHI+UH/XvdLyfj1+jQyYRG1NWFqanpkA=) # 使用 Jasypt 加密 (可使用 JasyptEncryptUtil.java 產生): 原為 myDbUser
+  #     password: ENC(gGt1aiDXi5vLk8OFcRsbOyjfWxET/jzeFnW4AJU5J50=) # 使用 Jasypt 加密 (可使用 JasyptEncryptUtil.java 產生): 原為 myDbUser
+  #     authentication-database: ENC(zv6TdgiR23knlcy5ePxyCKQqmiiW036h) # 使用 Jasypt 加密 (可使用 JasyptEncryptUtil.java 產生): 原為 admin
+  #     database: myshinynewdb # 指定要連線的 mongodb database 名稱
+  #     host: 127.0.0.1
+  #     port: 27017
+  #     auto-index-creation: true # 自動建立 INDEX
+
   jpa:
     show-sql: true
     properties:
@@ -34,3 +34,13 @@ jasypt:
     provider-name: SunJCE # 提供者名稱
     salt-generator-classname: org.jasypt.salt.RandomSaltGenerator # salt 生成器類
     string-output-type: base64 # 字符串輸出類型
+
+# 自訂參數
+custom:
+  mongodb:
+    username: ENC(Hoy4AgRmLJXcHI+UH/XvdLyfj1+jQyYRG1NWFqanpkA=) # 使用 Jasypt 加密 (可使用 JasyptEncryptUtil.java 產生): 原為 myDbUser
+    password: ENC(gGt1aiDXi5vLk8OFcRsbOyjfWxET/jzeFnW4AJU5J50=) # 使用 Jasypt 加密 (可使用 JasyptEncryptUtil.java 產生): 原為 myDbUser
+    authentication-database: ENC(zv6TdgiR23knlcy5ePxyCKQqmiiW036h) # 使用 Jasypt 加密 (可使用 JasyptEncryptUtil.java 產生): 原為 admin
+    database: myshinynewdb # 指定要連線的 mongodb database 名稱
+    host: 127.0.0.1
+    port: 27017

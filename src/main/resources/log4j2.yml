@@ -1,7 +1,7 @@
 Configuration:
-  status: WARN
-  monitorInterval: 0
-  packages: com.cathaybk.springbootmongodb.config
+  status: WARN # 設定 Log4j2 自身的日誌等級，方便除錯
+  monitorInterval: 0 # 設定監控間隔時間（秒），0 表示不監控配置文件變化
+  packages: com.cathaybk.springbootmongodb.config # Needed! 自訂的 Appender、Filter、Layout、PatternConverter 等元件時，需要設定
 
   Properties:
     Property:
@@ -12,7 +12,7 @@ Configuration:
       - name: log-pattern
         value: "[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n"
       - name: console-log-pattern
-        value: "%d{yyyy-MM-dd HH:mm:ss.SSS} %highlight{[%thread] %-5level} %style{%logger{36}}{cyan} - %msg%n"
+        value: "%highlight{[%thread] %-5level} %d{yyyy-MM-dd HH:mm:ss.SSS} %style{%logger{36}}{cyan} - %msg%n"
 
   Appenders:
     Console:
@@ -24,21 +24,23 @@ Configuration:
     RollingFile:
       name: My_RollingFile_Appender
       fileName: "${log-path}/${APP_NAME}.log"
-      filePattern: "${log-path}/${APP_NAME}.%d{yyyy-MM-dd HHmm}-%i.log.gz"
+      filePattern: "${log-path}/${APP_NAME}.%d{yyyy-MM-dd HH}-%i.log.gz"
       PatternLayout:
         pattern: "${log-pattern}"
       Policies:
         TimeBasedTriggeringPolicy:
-          interval: 1
+          interval: 1 # 每小時產生一個新的檔案(依照 filePattern 的 %d)
         SizeBasedTriggeringPolicy:
-          size: "3MB"
+          size: "3MB" # 單一檔案最大 3MB
+      DefaultRolloverStrategy:
+        max: 3 # 每分鐘最多只會保留 3 個壓縮檔（同一分鐘的 %i 序號最多到 3）
 
     # 需搭配 CustomMongoDbAppender.java 使用
     CustomMongoDb:
       name: My_MongoDB_Appender
-      connectionString: "mongodb://${env:MONGO_USER}:${env:MONGO_PWD}@localhost:27017/myshinynewdb?authSource=myshinynewdb"
-      databaseName: "myshinynewdb"
-      collectionName: "application_logs"
+      connectionString: "mongodb://${env:MONGO_DB_USER}:${env:MONGO_DB_PWD}@${env:MONGO_DB_HOST}:${env:MONGO_DB_PORT}/${env:MONGO_DB_INSTANCE_NAME}?authSource=${env:MONGO_DB_AUTH_DB}"
+      databaseName: "myshinynewdb" # 指定要寫入的 mongodb database 名稱
+      collectionName: "application_logs" # 指定要寫入的 mongodb collection 名稱
       ThresholdFilter:
         level: INFO
         onMatch: ACCEPT
@@ -49,8 +51,7 @@ Configuration:
       level: WARN
       AppenderRef:
         - ref: My_Console_Appender
-        - ref: My_MongoDB_Appender
-    Logger:
+    Logger: # named logger 具名日誌
       - name: com.cathaybk
         level: INFO
         additivity: false
@@ -59,5 +60,12 @@ Configuration:
             level: INFO
           - ref: My_RollingFile_Appender
             level: INFO
+          # - ref: My_MongoDB_Appender
+          #   level: INFO
+
+      - name: my_mongodb # 自訂 logger 名稱(當要寫進 MongoDB 時使用: Logger mongoLogger = LogManager.getLogger("my_mongodb");)
+        level: INFO
+        additivity: false
+        AppenderRef:
           - ref: My_MongoDB_Appender
             level: INFO

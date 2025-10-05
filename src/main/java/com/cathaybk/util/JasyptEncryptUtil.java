@@ -21,7 +21,7 @@ public class JasyptEncryptUtil {
         // 加密資料庫帳號密碼
         String username = "myDbUser";
         String password = "myDbUser";
-        String authDatabase = "myshinynewdb";
+        String authDatabase = "admin"; // 認證資料庫
         
         String encryptedUsername = encryptor.encrypt(username);
         String encryptedPassword = encryptor.encrypt(password);
